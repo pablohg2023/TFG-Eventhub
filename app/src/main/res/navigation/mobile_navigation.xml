@@ -22,4 +22,7 @@
         android:name="com.example.eventhubtfg.ui.favorites.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+
+
+
 </navigation>
