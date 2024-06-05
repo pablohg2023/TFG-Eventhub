@@ -1,13 +1,52 @@
 {
   "project_info": {
-    "project_number": "107605449754",
-    "project_id": "eventhub-457c1",
-    "storage_bucket": "eventhub-457c1.appspot.com"
+    "project_number": "618220411672",
+    "firebase_url": "https://bdproyecto-420f9-default-rtdb.firebaseio.com",
+    "project_id": "bdproyecto-420f9",
+    "storage_bucket": "bdproyecto-420f9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:107605449754:android:f622ea3a13da97e23f85a3",
+        "mobilesdk_app_id": "1:618220411672:android:03ff11a8cf10f174811c6d",
+        "android_client_info": {
+          "package_name": "com.example.eventhub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7ThYulHi0ZyYnd0H-t1oSQulGD_jTXpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618220411672:android:e5955116c4c647c7811c6d",
+        "android_client_info": {
+          "package_name": "com.example.eventhub2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7ThYulHi0ZyYnd0H-t1oSQulGD_jTXpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618220411672:android:e40879b1abd68f94811c6d",
         "android_client_info": {
           "package_name": "com.example.eventhubtfg"
         }
@@ -15,7 +54,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDExJOECgbphI8w_MryhRGDU_sjuaLijaM"
+          "current_key": "AIzaSyC7ThYulHi0ZyYnd0H-t1oSQulGD_jTXpc"
         }
       ],
       "services": {
