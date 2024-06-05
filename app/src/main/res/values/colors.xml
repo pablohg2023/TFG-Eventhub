@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="red">#FFFF1010</color>
+
+    <color name="color_principal">#2A8BDF</color>
+    <color name="color_secundario">#1D8AE8</color>
+    <color name="gray">#8C8A8A</color>
+    <color name="register_txtView">#555555</color>
+</resources>

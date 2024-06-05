@@ -1,0 +1,30 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.EventhubTFG" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Style del activity_main -->
+        <item name="colorPrimary">@color/color_principal</item>
+        <item name="colorPrimaryVariant">@color/color_principal</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/color_secundario</item>
+        <item name="colorSecondaryVariant">@color/color_secundario</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">@color/color_principal</item>
+        <!-- Style del activity_main -->
+
+    </style>
+
+    <style name="Theme.Eventhub" parent="Base.Theme.EventhubTFG" />
+
+    <style name="Theme.Eventhub.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Eventhub.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Eventhub.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.EventhubTFG" parent="Base.Theme.EventhubTFG" />
+</resources>
