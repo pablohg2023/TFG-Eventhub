@@ -13,19 +13,13 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.eventhubtfg.ui.calendar.CalendarFragment"
+        android:name="com.example.eventhubtfg.ui.calendar.GalleryFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.example.eventhubtfg.ui.favorites.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
-
-    <activity
-        android:id="@+id/nav_perfil"
-        android:name="com.example.eventhubtfg.ProfileActivity"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/activity_profile" />
 </navigation>
