@@ -1,6 +1,8 @@
 package com.example.eventhubtfg;
 
 public class Evento {
+
+    private int id;
     private String imagenUrl;
     private String nombre;
     private String descripcion;
@@ -8,16 +10,36 @@ public class Evento {
     private String fecha;
     private String hora;
 
+    private Boolean favorito;
+
     public Evento() {
     }
 
-    public Evento(String imagenUrl, String nombre, String descripcion, String lugar, String fecha, String hora) {
+    public Evento(Integer id, String imagenUrl, String nombre, String descripcion, String lugar, String fecha, String hora,Boolean favorito) {
+        this.id = id;
         this.imagenUrl = imagenUrl;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.lugar = lugar;
         this.fecha = fecha;
         this.hora = hora;
+        this.favorito = favorito;
+    }
+
+    public Boolean getFavorito() {
+        return favorito;
+    }
+
+    public void setFavorito(Boolean favorito) {
+        this.favorito = favorito;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getImagenUrl() {
