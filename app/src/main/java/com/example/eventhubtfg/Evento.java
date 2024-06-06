@@ -8,6 +8,9 @@ public class Evento {
     private String fecha;
     private String hora;
 
+    public Evento() {
+    }
+
     public Evento(int foto, String nombre, String descripcion, String lugar, String fecha, String hora) {
         this.foto = foto;
         this.nombre = nombre;

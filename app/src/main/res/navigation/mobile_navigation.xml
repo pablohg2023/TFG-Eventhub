@@ -12,14 +12,27 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_calendar"
         android:name="com.example.eventhubtfg.ui.calendar.CalendarFragment"
-        android:label="@string/menu_gallery"
+        android:label="Calendario"
         tools:layout="@layout/fragment_calendar" />
 
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.example.eventhubtfg.ui.favorites.SlideshowFragment"
-        android:label="@string/menu_slideshow"
+        android:label="Mis eventos"
         tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="com.example.eventhubtfg.ui.favorites.SlideshowFragment"
+        android:label="Notificaciones"
+        tools:layout="@layout/fragment_slideshow" />
+
+    <activity
+        android:id="@+id/nav_perfil"
+        android:name="com.example.eventhubtfg.ProfileActivity"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/activity_profile" />
+
 </navigation>

@@ -19,7 +19,7 @@ public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.Even
 
     public CardEventAdapter(Context context, ArrayList<Evento> eventos) {
         this.context = context;
-        this.eventos = eventos;
+        this.eventos = (eventos != null) ? eventos : new ArrayList<>();
     }
 
     @NonNull
@@ -32,7 +32,7 @@ public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.Even
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         Evento evento = eventos.get(position);
-        holder.eventImage.setImageResource(evento.getFoto());
+        holder.eventImage.setImageResource(R.drawable.arte);
         holder.eventName.setText(evento.getNombre());
         holder.eventDescription.setText(evento.getDescripcion());
         // Aquí puedes agregar más lógica, como manejar el botón de favorito
@@ -56,6 +56,13 @@ public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.Even
             eventDescription = itemView.findViewById(R.id.event_description);
             favoriteButton = itemView.findViewById(R.id.favorite_button);
         }
+
+
+    }
+
+    public void updateData(ArrayList<Evento> nuevosEventos) {
+        this.eventos = nuevosEventos;
+        notifyDataSetChanged();
     }
 }
 

@@ -18,11 +18,12 @@ import com.example.eventhubtfg.databinding.FragmentHomeBinding;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private HomeViewModel homeViewModel;
+    private CardEventAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -30,8 +31,14 @@ public class HomeFragment extends Fragment {
         RecyclerView recyclerView = binding.recylcerId;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        CardEventAdapter adapter = new CardEventAdapter(getContext(), homeViewModel.getListaDatos().getValue());
+        adapter = new CardEventAdapter(getContext(), homeViewModel.getListaDatos().getValue());
         recyclerView.setAdapter(adapter);
+
+        homeViewModel.getListaDatos().observe(getViewLifecycleOwner(), eventos -> {
+            if (eventos != null) {
+                adapter.updateData(eventos);
+            }
+        });
 
         return root;
     }
