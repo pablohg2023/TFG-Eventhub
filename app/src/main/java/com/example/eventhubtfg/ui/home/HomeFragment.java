@@ -9,7 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eventhubtfg.CardEventAdapter;
 import com.example.eventhubtfg.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -24,8 +27,12 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        RecyclerView recyclerView = binding.recylcerId;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        CardEventAdapter adapter = new CardEventAdapter(getContext(), homeViewModel.getListaDatos().getValue());
+        recyclerView.setAdapter(adapter);
+
         return root;
     }
 

@@ -64,4 +64,5 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="title_activity_callll">Callll</string>
+    <string name="title_activity_card_event_adapter">CardEventAdapter</string>
 </resources>

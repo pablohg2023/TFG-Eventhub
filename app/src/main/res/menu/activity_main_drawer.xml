@@ -17,7 +17,7 @@
             android:icon="@drawable/baseline_calendar_month_24"
             android:title="Calendario" />
         <item
-            android:id="@+id/nav_notificacion"
+            android:id="@+id/nav_slideshow"
             android:icon="@drawable/baseline_notifications_24"
             android:title="Notificaciones" />
         <item
