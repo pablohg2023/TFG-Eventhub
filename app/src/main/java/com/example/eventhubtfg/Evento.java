@@ -1,7 +1,7 @@
 package com.example.eventhubtfg;
 
 public class Evento {
-    private int foto;
+    private String imagenUrl;
     private String nombre;
     private String descripcion;
     private String lugar;
@@ -11,8 +11,8 @@ public class Evento {
     public Evento() {
     }
 
-    public Evento(int foto, String nombre, String descripcion, String lugar, String fecha, String hora) {
-        this.foto = foto;
+    public Evento(String imagenUrl, String nombre, String descripcion, String lugar, String fecha, String hora) {
+        this.imagenUrl = imagenUrl;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.lugar = lugar;
@@ -20,12 +20,12 @@ public class Evento {
         this.hora = hora;
     }
 
-    public int getFoto() {
-        return foto;
+    public String getImagenUrl() {
+        return imagenUrl;
     }
 
-    public void setFoto(int foto) {
-        this.foto = foto;
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 
     public String getNombre() {

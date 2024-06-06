@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.EventViewHolder> {
@@ -32,7 +34,7 @@ public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.Even
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         Evento evento = eventos.get(position);
-        holder.eventImage.setImageResource(R.drawable.arte);
+        Glide.with(context).load(evento.getImagenUrl()).into(holder.eventImage);
         holder.eventName.setText(evento.getNombre());
         holder.eventDescription.setText(evento.getDescripcion());
         // Aquí puedes agregar más lógica, como manejar el botón de favorito

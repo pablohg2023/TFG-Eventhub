@@ -38,7 +38,8 @@ android {
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
 
-
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation("com.google.firebase:firebase-analytics")
