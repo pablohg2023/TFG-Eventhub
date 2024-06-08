@@ -46,58 +46,71 @@ public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.Even
         holder.eventName.setText(evento.getNombre());
         holder.eventDescription.setText(evento.getDescripcion());
 
+        // Establecer el ícono del botón de favoritos como no favorito inicialmente
+        holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+
         // Obtener el ID del evento
         int eventoId = evento.getId();
-        boolean esFavorito = evento.getFavorito();
 
-        // Establecer el ícono del botón de favoritos según el estado del evento
-        if (esFavorito) {
-            holder.favoriteButton.setImageResource(R.drawable.ic_favorite);
-        } else {
-            holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
-        }
+        // Obtener el ID del usuario actual
+        String userId = obtenerIdUsuario();
 
-        // Establecer OnClickListener para el botón de favoritos
-        holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Obtener el ID del usuario actual
-                String userId = obtenerIdUsuario();
+        if (userId != null) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference favoritosRef = database.getReference("favoritos").child(userId).child(String.valueOf(eventoId));
 
-                if (userId != null) {
-                    // Actualizar el estado del evento en la base de datos
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference eventoRef = database.getReference("eventos").child(String.valueOf(eventoId));
+            // Comprobar si el evento está en la tabla de favoritos
+            favoritosRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    boolean esFavorito = dataSnapshot.exists();
 
-                    // Invertir el estado de favorito
-                    boolean nuevoEstadoFavorito = !esFavorito;
-                    eventoRef.child("favorito").setValue(nuevoEstadoFavorito);
+                    // Establecer el ícono del botón de favoritos según el estado del evento
+                    holder.favoriteButton.setImageResource(esFavorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
 
-                    // Actualizar el estado del evento localmente
-                    evento.setFavorito(nuevoEstadoFavorito);
+                    // Establecer el estado favorito del evento
+                    evento.setFavorito(esFavorito);
 
-                    // Cambiar el ícono del botón
-                    if (nuevoEstadoFavorito) {
-                        holder.favoriteButton.setImageResource(R.drawable.ic_favorite);
-                    } else {
-                        holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
-                    }
+                    // Establecer OnClickListener para el botón de favoritos
+                    holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Invertir el estado de favorito localmente
+                            boolean nuevoEstadoFavorito = !evento.getFavorito();
+                            evento.setFavorito(nuevoEstadoFavorito);
 
-                    // Actualizar la base de datos de favoritos del usuario
-                    DatabaseReference favoritosRef = database.getReference("favoritos").child(userId).child(String.valueOf(eventoId));
+                            // Cambiar el ícono del botón
+                            holder.favoriteButton.setImageResource(nuevoEstadoFavorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
 
-                    if (nuevoEstadoFavorito) {
-                        // Agregar a favoritos
-                        favoritosRef.setValue(evento);
-                    } else {
-                        // Eliminar de favoritos
-                        favoritosRef.removeValue();
-                    }
+                            // Actualizar la base de datos de favoritos del usuario
+                            if (nuevoEstadoFavorito) {
+                                // Agregar a favoritos
+                                favoritosRef.setValue(evento);
+                            } else {
+                                // Eliminar de favoritos
+                                favoritosRef.removeValue();
+                            }
 
-                    notifyItemChanged(position);
+                            // Notificar que el ítem ha cambiado
+                            notifyItemChanged(position);
+                        }
+                    });
                 }
-            }
-        });
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Manejar el error si es necesario
+                }
+            });
+        } else {
+            // Establecer OnClickListener para el botón de favoritos cuando no hay usuario autenticado
+            holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Manejar la situación donde no hay usuario autenticado, si es necesario
+                }
+            });
+        }
     }
 
     // Método para obtener el ID del usuario actual
