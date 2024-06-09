@@ -2,7 +2,13 @@ package com.example.eventhubtfg;
 
 import java.io.Serializable;
 
-public class Evento implements Serializable{
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class Evento implements Serializable {
 
     private int id;
     private String imagenUrl;
@@ -11,13 +17,13 @@ public class Evento implements Serializable{
     private String lugar;
     private String fecha;
     private String hora;
-
     private Boolean favorito;
+    private Date fechaDate; // Fecha como tipo Date
 
     public Evento() {
     }
 
-    public Evento(Integer id, String imagenUrl, String nombre, String descripcion, String lugar, String fecha, String hora,Boolean favorito) {
+    public Evento(Integer id, String imagenUrl, String nombre, String descripcion, String lugar, String fecha, String hora, Boolean favorito) {
         this.id = id;
         this.imagenUrl = imagenUrl;
         this.nombre = nombre;
@@ -26,6 +32,7 @@ public class Evento implements Serializable{
         this.fecha = fecha;
         this.hora = hora;
         this.favorito = favorito;
+        this.fechaDate = convertStringToDate(fecha); // Convertir la fecha String a tipo Date
     }
 
     public Boolean getFavorito() {
@@ -82,6 +89,7 @@ public class Evento implements Serializable{
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+        this.fechaDate = convertStringToDate(fecha); // Convertir la fecha String a tipo Date
     }
 
     public String getHora() {
@@ -91,5 +99,19 @@ public class Evento implements Serializable{
     public void setHora(String hora) {
         this.hora = hora;
     }
-}
 
+    public Date getFechaDate() {
+        return fechaDate;
+    }
+
+    // Método para convertir la fecha String a tipo Date
+    public Date convertStringToDate(String fechaString) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            return formatter.parse(fechaString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}

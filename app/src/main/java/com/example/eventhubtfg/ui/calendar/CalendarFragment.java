@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,17 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventhubtfg.CardCalendarAdapter;
-import com.example.eventhubtfg.CardEventAdapter;
 import com.example.eventhubtfg.Evento;
 import com.example.eventhubtfg.R;
 import com.example.eventhubtfg.databinding.FragmentCalendarBinding;
-import com.example.eventhubtfg.databinding.FragmentEventBinding;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
+
 
 public class CalendarFragment extends Fragment {
 
@@ -33,6 +30,8 @@ public class CalendarFragment extends Fragment {
     private CalendarView calendarView;
     private CalendarViewModel calendarViewModel;
     private CardCalendarAdapter adapter;
+
+    private HashSet<Long> eventDatesSet = new HashSet<>();
 
     @Nullable
     @Override
@@ -53,10 +52,28 @@ public class CalendarFragment extends Fragment {
         calendarViewModel.getFavoriteEvents().observe(getViewLifecycleOwner(), eventos -> {
             if (eventos != null) {
                 adapter.updateData(eventos);
+                // Resaltar los días en el CalendarView
+                highlightEventDays(eventos);
             }
         });
 
         return root;
+    }
+
+    private void highlightEventDays(List<Evento> eventos) {
+        for (Evento evento : eventos) {
+            Date fechaEvento = evento.getFechaDate();
+            if (fechaEvento != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(fechaEvento);
+                eventDatesSet.add(calendar.getTimeInMillis()); // Agregar la fecha al conjunto
+            }
+        }
+
+        // Resaltar los días en el CalendarView
+        for (long eventDateMillis : eventDatesSet) {
+            calendarView.setDate(eventDateMillis, true, true);
+        }
     }
 
 

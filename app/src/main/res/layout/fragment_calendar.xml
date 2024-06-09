@@ -18,12 +18,12 @@
             android:layout_margin="16dp"
             android:background="@drawable/calendar_bg"
             android:elevation="4dp" />
-    </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerCalendar"
-        android:layout_width="match_parent"
-        android:layout_height="372dp"
-        android:layout_marginTop="400dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="372dp"
+            android:layout_marginTop="400dp" />
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
