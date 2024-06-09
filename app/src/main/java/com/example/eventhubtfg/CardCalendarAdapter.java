@@ -27,24 +27,24 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.EventViewHolder> {
+public class CardCalendarAdapter extends RecyclerView.Adapter<CardCalendarAdapter.CalendarViewHolder> {
     private ArrayList<Evento> eventos;
     private Context context;
 
-    public CardEventAdapter(Context context, ArrayList<Evento> eventos) {
+    public CardCalendarAdapter(Context context, ArrayList<Evento> eventos) {
         this.context = context;
         this.eventos = (eventos != null) ? eventos : new ArrayList<>();
     }
 
     @NonNull
     @Override
-    public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_card_event_adapter, parent, false);
-        return new EventViewHolder(view);
+    public CalendarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_card_calendar_adapter, parent, false);
+        return new CalendarViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EventViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull CalendarViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Evento evento = eventos.get(position);
 
         // Verificar si la URL de la imagen no está vacía
@@ -54,7 +54,6 @@ public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.Even
         }
 
         holder.eventName.setText(evento.getNombre());
-        holder.eventDescription.setText(evento.getDescripcion());
 
         // Establecer el ícono del botón de favoritos como no favorito inicialmente
         holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
@@ -122,31 +121,6 @@ public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.Even
             });
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Aquí puedes abrir un nuevo fragmento para mostrar los detalles del evento
-                Detalle_Evento_Fragment fragment = new Detalle_Evento_Fragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("evento", evento);
-                fragment.setArguments(bundle);
-
-                // Obtener el FragmentManager
-                FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-
-                // Comenzar una nueva transacción de fragmento
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-                // Configurar una animación personalizada para la transición
-                transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down);
-
-                // Reemplazar el fragmento actual con el fragmento de detalle del evento
-                transaction.add(R.id.fragment_container, fragment); // Usar add() en lugar de replace()
-                transaction.addToBackStack(null);  // Opcional, para permitir retroceder
-                transaction.commit();
-            }
-        });
-
     }
 
     // Método para obtener el ID del usuario actual
@@ -166,17 +140,15 @@ public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.Even
         return eventos.size();
     }
 
-    public static class EventViewHolder extends RecyclerView.ViewHolder {
+    public static class CalendarViewHolder extends RecyclerView.ViewHolder {
         ImageView eventImage;
         TextView eventName;
-        TextView eventDescription;
         ImageButton favoriteButton;
 
-        public EventViewHolder(@NonNull View itemView) {
+        public CalendarViewHolder(@NonNull View itemView) {
             super(itemView);
             eventImage = itemView.findViewById(R.id.event_image);
             eventName = itemView.findViewById(R.id.event_name);
-            eventDescription = itemView.findViewById(R.id.event_description);
             favoriteButton = itemView.findViewById(R.id.favorite_button);
         }
     }

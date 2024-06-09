@@ -9,36 +9,33 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="8dp">
 
         <ImageView
             android:id="@+id/event_image"
-            android:layout_width="397dp"
-            android:layout_height="108dp"
+            android:layout_width="68dp"
+            android:layout_height="77dp"
+            android:layout_gravity="center"
             android:contentDescription="@string/event_image_description"
             android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/event_name"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_width="238dp"
+            android:layout_height="52dp"
             android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
             android:textSize="18sp"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/event_description"
-            android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:layout_marginTop="4dp" />
 
         <ImageButton
             android:id="@+id/favorite_button"
             android:layout_width="50dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="8dp"
+            android:layout_height="79dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/favorite_button_description"
             android:src="@drawable/ic_favorite_border" />

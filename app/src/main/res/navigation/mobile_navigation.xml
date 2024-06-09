@@ -18,10 +18,10 @@
         tools:layout="@layout/fragment_calendar" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.eventhubtfg.ui.favorites.SlideshowFragment"
+        android:id="@+id/nav_events"
+        android:name="com.example.eventhubtfg.ui.events.EventFragment"
         android:label="Mis eventos"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_event" />
 
     <fragment
         android:id="@+id/nav_gallery"

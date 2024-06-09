@@ -13,6 +13,9 @@
         android:theme="@style/Theme.EventhubTFG"
         tools:targetApi="31">
         <activity
+            android:name=".CardCalendarAdapter"
+            android:exported="false" />
+        <activity
             android:name=".CardEventAdapter"
             android:exported="true"
             android:label="@string/title_activity_card_event_adapter"
