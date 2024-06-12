@@ -136,10 +136,10 @@ public class LoginActivity extends AppCompatActivity {
                                         // Redirige según el rol del usuario
                                         if ("Cliente".equals(role)) {
                                             Toast.makeText(LoginActivity.this, "Inicio de sesión como cliente", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(LoginActivity.this, MainActivityOrg.class));
+                                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                         } else {
                                             Toast.makeText(LoginActivity.this, "Inicio de sesión como organizador de eventos", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                            startActivity(new Intent(LoginActivity.this, MainActivityOrg.class));
                                         }
                                         finish();
                                     } else {
