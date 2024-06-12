@@ -75,7 +75,31 @@ public class ProfileActivity extends AppCompatActivity {
         btnVolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    // El usuario está autenticado, verifica su rol
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Usuarios").child(user.getUid()).child("rol");
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                String rol = dataSnapshot.getValue(String.class);
+                                if (rol != null) {
+                                    // Verificar el rol del usuario
+                                    if (rol.equals("Cliente")) {
+                                        startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+                                    } else {
+                                        startActivity(new Intent(ProfileActivity.this, MainActivityOrg.class));
+                                    }
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Manejar el error si es necesario
+                        }
+                    });
+                }
             }
         });
 

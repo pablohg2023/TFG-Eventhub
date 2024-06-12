@@ -16,24 +16,25 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.eventhubtfg.LoginActivity;
 import com.example.eventhubtfg.R;
 import com.example.eventhubtfg.databinding.ActivityMainBinding;
+import com.example.eventhubtfg.databinding.ActivityMainOrgBinding;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivityOrg extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private ActivityMainBinding binding;
+    private ActivityMainOrgBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityMainOrgBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.appBarMain.toolbar);
+        setSupportActionBar(binding.appBarMainOrg.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        NavigationView navigationView = binding.navViewOrg;
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home_org, R.id.nav_perfil, R.id.nav_logout)
                 .setOpenableLayout(drawer)

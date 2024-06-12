@@ -25,7 +25,7 @@ public class CardEventAdapterOrg extends RecyclerView.Adapter<CardEventAdapterOr
 
     public CardEventAdapterOrg(Context context, ArrayList<Evento> eventos) {
         this.context = context;
-        this.eventos = eventos;
+        this.eventos = (eventos != null) ? eventos : new ArrayList<>();
     }
 
     @NonNull
@@ -48,7 +48,6 @@ public class CardEventAdapterOrg extends RecyclerView.Adapter<CardEventAdapterOr
         holder.eventName.setText(evento.getNombre());
         holder.eventDescription.setText(evento.getDescripcion());
 
-        cargarEventosDesdeFirebase();
     }
 
     @Override
@@ -68,28 +67,6 @@ public class CardEventAdapterOrg extends RecyclerView.Adapter<CardEventAdapterOr
             eventDescription = itemView.findViewById(R.id.event_description);
         }
 
-    }
-
-    private void cargarEventosDesdeFirebase() {
-        DatabaseReference eventosRef = FirebaseDatabase.getInstance().getReference("eventos");
-        eventosRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                eventos.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Evento evento = snapshot.getValue(Evento.class);
-                    if (evento != null) {
-                        eventos.add(evento);
-                    }
-                }
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Manejar el error si es necesario
-            }
-        });
     }
 
     public void updateData(ArrayList<Evento> nuevosEventos) {
