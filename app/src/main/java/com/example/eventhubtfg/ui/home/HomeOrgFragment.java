@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventhubtfg.CardEventAdapter;
+import com.example.eventhubtfg.CardEventAdapterOrg;
 import com.example.eventhubtfg.databinding.FragmentHomeBinding;
 import com.example.eventhubtfg.databinding.FragmentHomeOrgBinding;
 
@@ -20,7 +21,7 @@ public class HomeOrgFragment extends Fragment {
 
     private FragmentHomeOrgBinding binding;
     private HomeOrgViewModel homeOrgViewModel;
-    private CardEventAdapter adapter;
+    private CardEventAdapterOrg adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class HomeOrgFragment extends Fragment {
         RecyclerView recyclerView = binding.recylcerId;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new CardEventAdapter(getContext(), homeOrgViewModel.getListaDatos().getValue());
+        adapter = new CardEventAdapterOrg(getContext(), homeOrgViewModel.getListaDatos().getValue());
         recyclerView.setAdapter(adapter);
 
         homeOrgViewModel.getListaDatos().observe(getViewLifecycleOwner(), eventos -> {
