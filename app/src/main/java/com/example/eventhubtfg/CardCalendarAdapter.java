@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -30,10 +32,12 @@ import java.util.ArrayList;
 public class CardCalendarAdapter extends RecyclerView.Adapter<CardCalendarAdapter.CalendarViewHolder> {
     private ArrayList<Evento> eventos;
     private Context context;
+    private CalendarView calendarView;
 
-    public CardCalendarAdapter(Context context, ArrayList<Evento> eventos) {
+    public CardCalendarAdapter(Context context, ArrayList<Evento> eventos, CalendarView calendarView) {
         this.context = context;
         this.eventos = (eventos != null) ? eventos : new ArrayList<>();
+        this.calendarView = calendarView;
     }
 
     @NonNull
@@ -47,62 +51,38 @@ public class CardCalendarAdapter extends RecyclerView.Adapter<CardCalendarAdapte
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Evento evento = eventos.get(position);
 
-        // Verificar si la URL de la imagen no está vacía
         if (evento.getImagenUrl() != null && !evento.getImagenUrl().isEmpty()) {
-            // Usar Picasso para cargar la imagen desde la URL
             Picasso.get().load(evento.getImagenUrl()).into(holder.eventImage);
         }
 
         holder.eventName.setText(evento.getNombre());
 
-        // Establecer el ícono del botón de favoritos como no favorito inicialmente
         holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
 
-        // Obtener el ID del evento
         int eventoId = evento.getId();
-
-        // Obtener el ID del usuario actual
         String userId = obtenerIdUsuario();
 
         if (userId != null) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference favoritosRef = database.getReference("favoritos").child(userId).child(String.valueOf(eventoId));
 
-            // Comprobar si el evento está en la tabla de favoritos
             favoritosRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     boolean esFavorito = dataSnapshot.exists();
-
-                    // Establecer el ícono del botón de favoritos según el estado del evento
                     holder.favoriteButton.setImageResource(esFavorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
-
-                    // Establecer el estado favorito del evento
                     evento.setFavorito(esFavorito);
 
-                    // Establecer OnClickListener para el botón de favoritos
-                    holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Invertir el estado de favorito localmente
-                            boolean nuevoEstadoFavorito = !evento.getFavorito();
-                            evento.setFavorito(nuevoEstadoFavorito);
-
-                            // Cambiar el ícono del botón
-                            holder.favoriteButton.setImageResource(nuevoEstadoFavorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
-
-                            // Actualizar la base de datos de favoritos del usuario
-                            if (nuevoEstadoFavorito) {
-                                // Agregar a favoritos
-                                favoritosRef.setValue(evento);
-                            } else {
-                                // Eliminar de favoritos
-                                favoritosRef.removeValue();
-                            }
-
-                            // Notificar que el ítem ha cambiado
-                            notifyItemChanged(position);
+                    holder.favoriteButton.setOnClickListener(v -> {
+                        boolean nuevoEstadoFavorito = !evento.getFavorito();
+                        evento.setFavorito(nuevoEstadoFavorito);
+                        holder.favoriteButton.setImageResource(nuevoEstadoFavorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
+                        if (nuevoEstadoFavorito) {
+                            favoritosRef.setValue(evento);
+                        } else {
+                            favoritosRef.removeValue();
                         }
+                        notifyItemChanged(position);
                     });
                 }
 
@@ -112,25 +92,27 @@ public class CardCalendarAdapter extends RecyclerView.Adapter<CardCalendarAdapte
                 }
             });
         } else {
-            // Establecer OnClickListener para el botón de favoritos cuando no hay usuario autenticado
-            holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Manejar la situación donde no hay usuario autenticado, si es necesario
-                }
+            holder.favoriteButton.setOnClickListener(v -> {
+                // Manejar la situación donde no hay usuario autenticado, si es necesario
             });
         }
 
+        holder.itemView.setOnClickListener(v -> {
+            if (evento.getFechaDate() != null) {
+                long dateInMillis = evento.getFechaDate().getTime();
+                calendarView.setDate(dateInMillis, true, true);
+
+                String horaEvento = evento.getHora();
+                Toast.makeText(context, "Hora del evento: " + horaEvento, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    // Método para obtener el ID del usuario actual
     private String obtenerIdUsuario() {
         FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
         if (usuario != null) {
             return usuario.getUid();
         } else {
-            // Si el usuario es nulo, significa que no hay ningún usuario autenticado
-            // Aquí puedes manejar esta situación según las necesidades de tu aplicación
             return null;
         }
     }
@@ -157,5 +139,4 @@ public class CardCalendarAdapter extends RecyclerView.Adapter<CardCalendarAdapte
         this.eventos = nuevosEventos;
         notifyDataSetChanged();
     }
-
 }
