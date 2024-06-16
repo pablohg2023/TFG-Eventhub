@@ -3,20 +3,17 @@ package com.example.eventhubtfg;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,12 +21,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
-public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.EventViewHolder> {
+public class CardEventAdapter extends RecyclerView.Adapter<EventViewHolder> {
     private ArrayList<Evento> eventos;
     private Context context;
 
@@ -148,7 +143,6 @@ public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.Even
                 transaction.commit();
             }
         });
-
     }
 
     // Método para obtener el ID del usuario actual
@@ -168,24 +162,8 @@ public class CardEventAdapter extends RecyclerView.Adapter<CardEventAdapter.Even
         return eventos.size();
     }
 
-    public static class EventViewHolder extends RecyclerView.ViewHolder {
-        ImageView eventImage;
-        TextView eventName;
-        TextView eventDescription;
-        ImageButton favoriteButton;
-
-        public EventViewHolder(@NonNull View itemView) {
-            super(itemView);
-            eventImage = itemView.findViewById(R.id.event_image);
-            eventName = itemView.findViewById(R.id.event_name);
-            eventDescription = itemView.findViewById(R.id.event_description);
-            favoriteButton = itemView.findViewById(R.id.favorite_button);
-        }
-    }
-
     public void updateData(ArrayList<Evento> nuevosEventos) {
         this.eventos = nuevosEventos;
         notifyDataSetChanged();
     }
-
 }

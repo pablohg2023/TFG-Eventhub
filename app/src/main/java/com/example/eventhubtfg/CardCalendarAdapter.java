@@ -2,22 +2,13 @@ package com.example.eventhubtfg;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,10 +17,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
-public class CardCalendarAdapter extends RecyclerView.Adapter<CardCalendarAdapter.CalendarViewHolder> {
+public class CardCalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     private ArrayList<Evento> eventos;
     private Context context;
     private CalendarView calendarView;
@@ -56,7 +46,6 @@ public class CardCalendarAdapter extends RecyclerView.Adapter<CardCalendarAdapte
         }
 
         holder.eventName.setText(evento.getNombre());
-
         holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
 
         int eventoId = evento.getId();
@@ -120,19 +109,6 @@ public class CardCalendarAdapter extends RecyclerView.Adapter<CardCalendarAdapte
     @Override
     public int getItemCount() {
         return eventos.size();
-    }
-
-    public static class CalendarViewHolder extends RecyclerView.ViewHolder {
-        ImageView eventImage;
-        TextView eventName;
-        ImageButton favoriteButton;
-
-        public CalendarViewHolder(@NonNull View itemView) {
-            super(itemView);
-            eventImage = itemView.findViewById(R.id.event_image);
-            eventName = itemView.findViewById(R.id.event_name);
-            favoriteButton = itemView.findViewById(R.id.favorite_button);
-        }
     }
 
     public void updateData(ArrayList<Evento> nuevosEventos) {
