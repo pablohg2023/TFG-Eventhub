@@ -21,6 +21,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class CreateEvent extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -60,7 +66,7 @@ public class CreateEvent extends AppCompatActivity {
                 if (imageUri != null) {
                     uploadImage();
                 } else {
-                    crearEvento();
+                    Toast.makeText(CreateEvent.this, "Por favor, selecciona una imagen para el evento", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -130,6 +136,26 @@ public class CreateEvent extends AppCompatActivity {
             return;
         }
 
+        if (!isValidDescription(descripcion)) {
+            Toast.makeText(this, "La descripción no puede tener más de 150 caracteres", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!isValidFutureDate(fecha)) {
+            Toast.makeText(this, "La fecha debe ser posterior a una semana del día actual", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!isValidMilitaryTime(hora)) {
+            Toast.makeText(this, "La hora debe estar en formato de 24 horas (HH:mm)", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!isValidPrice(precio)) {
+            Toast.makeText(this, "El precio no puede ser negativo ni menor a cero", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference eventosRef = database.getReference("eventos");
 
@@ -157,5 +183,47 @@ public class CreateEvent extends AppCompatActivity {
                     finish();
                 })
                 .addOnFailureListener(e -> Toast.makeText(CreateEvent.this, "Error al crear el evento", Toast.LENGTH_SHORT).show());
+    }
+
+    private boolean isValidDescription(String description) {
+        return description.length() <= 150;
+    }
+
+    private boolean isValidFutureDate(String date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Calendar currentDate = Calendar.getInstance();
+        currentDate.add(Calendar.DAY_OF_MONTH, 7); // Añade una semana a la fecha actual
+
+        try {
+            Date inputDate = sdf.parse(date);
+            Date futureDate = currentDate.getTime();
+
+            return inputDate != null && inputDate.after(futureDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean isValidMilitaryTime(String time) {
+        // El formato debe ser HH:mm
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        sdf.setLenient(false); // Desactiva el modo lenient para asegurar validación estricta
+
+        try {
+            sdf.parse(time); // Intenta parsear la hora
+            return true; // Si no lanza excepción, la hora es válida en formato militar
+        } catch (ParseException e) {
+            return false; // Si hay excepción, la hora no es válida en formato militar
+        }
+    }
+
+    private boolean isValidPrice(String price) {
+        try {
+            double parsedPrice = Double.parseDouble(price);
+            return parsedPrice >= 0; // El precio debe ser mayor o igual a cero
+        } catch (NumberFormatException e) {
+            return false; // No se pudo parsear a double, no es un número válido
+        }
     }
 }

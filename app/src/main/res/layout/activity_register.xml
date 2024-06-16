@@ -101,11 +101,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editFechaNacimiento"
-            android:focusable="false"
-            android:inputType="date"
             android:textSize="16sp"
             android:padding="6dp"
             android:layout_below="@id/txtFechaNacimiento"
+            android:inputType="date"
             android:background="@drawable/border"/>
 
         <TextView

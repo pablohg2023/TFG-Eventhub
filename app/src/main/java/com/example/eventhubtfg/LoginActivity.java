@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()){
-                                    Toast.makeText(LoginActivity.this, "Check your email", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, "Revisa tu email", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
                                 } else {
                                     Toast.makeText(LoginActivity.this, "Vuelve a intentarlo", Toast.LENGTH_SHORT).show();

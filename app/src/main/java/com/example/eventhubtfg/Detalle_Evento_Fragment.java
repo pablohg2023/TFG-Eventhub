@@ -25,6 +25,8 @@ public class Detalle_Evento_Fragment extends Fragment {
     private TextView eventDateTextView;
     private TextView eventTimeTextView;
 
+    private TextView eventPriceTextView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class Detalle_Evento_Fragment extends Fragment {
         eventPlaceTextView = view.findViewById(R.id.event_place);
         eventDateTextView = view.findViewById(R.id.event_date);
         eventTimeTextView = view.findViewById(R.id.event_time);
+        eventPriceTextView = view.findViewById(R.id.event_price);
         btnCerrar = view.findViewById(R.id.btnCerrar);
 
         // Obtener los datos del evento de los argumentos del fragmento
@@ -46,9 +49,10 @@ public class Detalle_Evento_Fragment extends Fragment {
             if (evento != null) {
                 eventNameTextView.setText(evento.getNombre());
                 eventDescriptionTextView.setText(evento.getDescripcion());
-                eventPlaceTextView.setText(evento.getLugar());
-                eventDateTextView.setText(evento.getFecha());
-                eventTimeTextView.setText(evento.getHora());
+                eventPlaceTextView.setText("Lugar: " + evento.getLugar());
+                eventDateTextView.setText("Fecha: " + evento.getFecha());
+                eventTimeTextView.setText("Hora: " + evento.getHora());
+                eventPriceTextView.setText("Precio: " + Double.toString(evento.getPrecio()) + " €");
 
                 // Cargar la imagen del evento si hay una URL válida
                 if (evento.getImagenUrl() != null && !evento.getImagenUrl().isEmpty()) {

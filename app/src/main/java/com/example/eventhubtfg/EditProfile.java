@@ -121,6 +121,12 @@ public class EditProfile extends AppCompatActivity {
                             return;
                         }
 
+                        // Validar la nueva contraseña utilizando el método estático de RegisterActivity
+                        if (!RegisterActivity.validatePassword(newPassword)) {
+                            Toast.makeText(EditProfile.this, "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
 

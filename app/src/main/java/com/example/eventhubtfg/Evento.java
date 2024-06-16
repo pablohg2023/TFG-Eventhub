@@ -17,13 +17,14 @@ public class Evento implements Serializable {
     private String lugar;
     private String fecha;
     private String hora;
+    private double precio;
     private Boolean favorito;
     private Date fechaDate; // Fecha como tipo Date
 
     public Evento() {
     }
 
-    public Evento(Integer id, String imagenUrl, String nombre, String descripcion, String lugar, String fecha, String hora, Boolean favorito) {
+    public Evento(Integer id, String imagenUrl, String nombre, String descripcion, String lugar, String fecha, String hora, double precio, Boolean favorito) {
         this.id = id;
         this.imagenUrl = imagenUrl;
         this.nombre = nombre;
@@ -32,7 +33,16 @@ public class Evento implements Serializable {
         this.fecha = fecha;
         this.hora = hora;
         this.favorito = favorito;
-        this.fechaDate = convertStringToDate(fecha); // Convertir la fecha String a tipo Date
+        this.precio = precio;
+        this.fechaDate = convertStringToDate(fecha);
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 
     public Boolean getFavorito() {
