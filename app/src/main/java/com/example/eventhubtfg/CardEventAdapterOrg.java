@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,10 +23,12 @@ import java.util.ArrayList;
 public class CardEventAdapterOrg extends RecyclerView.Adapter<CardEventAdapterOrg.EventViewHolder> {
     private ArrayList<Evento> eventos;
     private Context context;
+    private OnEventDeleteListener onEventDeleteListener;
 
-    public CardEventAdapterOrg(Context context, ArrayList<Evento> eventos) {
+    public CardEventAdapterOrg(Context context, ArrayList<Evento> eventos, OnEventDeleteListener onEventDeleteListener) {
         this.context = context;
         this.eventos = (eventos != null) ? eventos : new ArrayList<>();
+        this.onEventDeleteListener = onEventDeleteListener;
     }
 
     @NonNull
@@ -39,15 +42,18 @@ public class CardEventAdapterOrg extends RecyclerView.Adapter<CardEventAdapterOr
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         Evento evento = eventos.get(position);
 
-        // Verificar si la URL de la imagen no está vacía
         if (evento.getImagenUrl() != null && !evento.getImagenUrl().isEmpty()) {
-            // Usar Picasso para cargar la imagen desde la URL
             Picasso.get().load(evento.getImagenUrl()).into(holder.eventImage);
         }
 
         holder.eventName.setText(evento.getNombre());
         holder.eventDescription.setText(evento.getDescripcion());
 
+        holder.deleteButton.setOnClickListener(v -> {
+            if (onEventDeleteListener != null) {
+                onEventDeleteListener.onEventDelete(evento.getId());
+            }
+        });
     }
 
     @Override
@@ -59,18 +65,23 @@ public class CardEventAdapterOrg extends RecyclerView.Adapter<CardEventAdapterOr
         ImageView eventImage;
         TextView eventName;
         TextView eventDescription;
+        ImageButton deleteButton;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
             eventImage = itemView.findViewById(R.id.event_image);
             eventName = itemView.findViewById(R.id.event_name);
             eventDescription = itemView.findViewById(R.id.event_description);
+            deleteButton = itemView.findViewById(R.id.delete_button);
         }
-
     }
 
     public void updateData(ArrayList<Evento> nuevosEventos) {
         this.eventos = nuevosEventos;
         notifyDataSetChanged();
+    }
+
+    public interface OnEventDeleteListener {
+        void onEventDelete(int eventId);
     }
 }

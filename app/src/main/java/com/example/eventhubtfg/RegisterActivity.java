@@ -75,7 +75,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Radiobutton
         radioGroupRol = findViewById(R.id.rdbtnRol);
-        radioGroupRol.clearCheck();
 
         tengoCuenta.setOnClickListener(new View.OnClickListener() {
             @Override

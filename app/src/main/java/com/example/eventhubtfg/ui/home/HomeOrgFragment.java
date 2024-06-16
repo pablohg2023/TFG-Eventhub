@@ -20,7 +20,7 @@ import com.example.eventhubtfg.databinding.FragmentHomeOrgBinding;
 
 import java.util.ArrayList;
 
-public class HomeOrgFragment extends Fragment {
+public class HomeOrgFragment extends Fragment implements CardEventAdapterOrg.OnEventDeleteListener {
 
     private FragmentHomeOrgBinding binding;
     private HomeOrgViewModel homeOrgViewModel;
@@ -28,8 +28,7 @@ public class HomeOrgFragment extends Fragment {
 
     private ArrayList<Evento> listaEventos = new ArrayList<>();
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeOrgViewModel = new ViewModelProvider(this).get(HomeOrgViewModel.class);
 
         binding = FragmentHomeOrgBinding.inflate(inflater, container, false);
@@ -38,7 +37,7 @@ public class HomeOrgFragment extends Fragment {
         RecyclerView recyclerView = binding.recylcerId;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new CardEventAdapterOrg(getContext(), homeOrgViewModel.getListaDatos().getValue());
+        adapter = new CardEventAdapterOrg(getContext(), homeOrgViewModel.getListaDatos().getValue(), this);
         recyclerView.setAdapter(adapter);
 
         homeOrgViewModel.getListaDatos().observe(getViewLifecycleOwner(), eventos -> {
@@ -51,6 +50,11 @@ public class HomeOrgFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onEventDelete(int eventId) {
+        homeOrgViewModel.eliminarEvento(eventId);
     }
 
     @Override

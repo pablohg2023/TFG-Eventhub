@@ -12,6 +12,14 @@
         android:orientation="vertical"
         android:padding="8dp">
 
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:layout_width="42dp"
+            android:layout_height="46dp"
+            android:background="@color/white"
+            android:layout_marginLeft="320dp"
+            android:src="@drawable/ic_basura" />
+
         <ImageView
             android:id="@+id/event_image"
             android:layout_width="397dp"

@@ -81,9 +81,7 @@
             android:layout_height="wrap_content"
             android:hint="Hora del Evento"
             android:layout_marginTop="16dp"
-            android:inputType="time"
-            android:focusable="false"
-            android:clickable="true" />
+            android:inputType="time"/>
 
         <!-- Campo de entrada para el precio del evento -->
         <EditText

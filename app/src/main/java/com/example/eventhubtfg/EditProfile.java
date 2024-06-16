@@ -30,6 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.checkerframework.common.reflection.qual.NewInstance;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,6 +99,7 @@ public class EditProfile extends AppCompatActivity {
                 EditText editTextNewPassword = dialogView.findViewById(R.id.editTextNewPassword);
                 EditText editTextRepeatPassword = dialogView.findViewById(R.id.editTextRepeatPassword);
                 Button btnUpdatePassword = dialogView.findViewById(R.id.btnUpdatePassword);
+                Button btnCancelPassword = dialogView.findViewById(R.id.btnCancelPassword);
 
                 builder.setView(dialogView);
                 AlertDialog dialog = builder.create();
@@ -150,6 +153,13 @@ public class EditProfile extends AppCompatActivity {
                                         Toast.makeText(EditProfile.this, "Autenticación fallida. La contraseña actual puede ser incorrecta", Toast.LENGTH_SHORT).show();
                                     }
                                 });
+                    }
+                });
+
+                btnCancelPassword.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
                     }
                 });
                 dialog.show();
