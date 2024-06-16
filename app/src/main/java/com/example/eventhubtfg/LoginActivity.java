@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnIniciarSesion, btnRegistrarse;
     TextView forgotPassword;
     private FirebaseAuth mAuth;
+    private boolean isPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,20 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent resgisterPage = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(resgisterPage);
+            }
+        });
+
+        etContraseña.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (etContraseña.getRight() - etContraseña.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        togglePasswordVisibility();
+                        return true;
+                    }
+                }
+                return false;
             }
         });
 
@@ -157,6 +174,19 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void togglePasswordVisibility() {
+        if (isPasswordVisible) {
+            // Si la contraseña es visible, ocultarla
+            etContraseña.setTransformationMethod(new PasswordTransformationMethod());
+        } else {
+            // Si la contraseña está oculta, mostrarla
+            etContraseña.setTransformationMethod(null);
+        }
+        // Mover el cursor al final del texto
+        etContraseña.setSelection(etContraseña.length());
+        isPasswordVisible = !isPasswordVisible; // Cambiar el estado de visibilidad
     }
 
 }
