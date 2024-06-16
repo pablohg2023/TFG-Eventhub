@@ -40,12 +40,9 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private RadioGroup radioGroupRol;
     private RadioButton radioButtonRol;
-
     private String txtNombre, txtFechaNac, txtApellidos, txtRol, txtPassword, txtPasswordRepeat, txtMail;
-
     FirebaseAuth auth;
     DatabaseReference databaseReference;
-
     ProgressDialog progressDialog;
 
     @Override
@@ -68,7 +65,6 @@ public class RegisterActivity extends AppCompatActivity {
         editPasswordRepeat = findViewById(R.id.editPasswordRepeat);
         editMail = findViewById(R.id.editEmail);
 
-        // Radiobutton
         radioGroupRol = findViewById(R.id.rdbtnRol);
 
         TextView tengoCuenta = findViewById(R.id.txtTengoCuenta);
@@ -96,58 +92,41 @@ public class RegisterActivity extends AppCompatActivity {
 
 
                 if (TextUtils.isEmpty(txtNombre)) {
-                    Toast.makeText(RegisterActivity.this, "Completa el nombre", Toast.LENGTH_LONG).show();
                     editNombre.setError("Se requiere el nombre");
                     editNombre.requestFocus();
-                } else if (!isValidName(txtNombre)) {
+                } else if (!validarNombre(txtNombre)) {
                     Toast.makeText(RegisterActivity.this, "El nombre no puede contener números ni caracteres especiales", Toast.LENGTH_LONG).show();
-                    editNombre.setError("Nombre inválido");
                     editNombre.requestFocus();
                 } else if (TextUtils.isEmpty(txtApellidos)) {
-                    Toast.makeText(RegisterActivity.this, "Completa los apellidos", Toast.LENGTH_LONG).show();
                     editApellidos.setError("Se requieren los apellidos");
                     editApellidos.requestFocus();
-                } else if (!isValidName(txtApellidos)) {
+                } else if (!validarNombre(txtApellidos)) {
                     Toast.makeText(RegisterActivity.this, "Los apellidos no pueden contener números ni caracteres especiales", Toast.LENGTH_LONG).show();
-                    editApellidos.setError("Apellidos inválidos");
                     editApellidos.requestFocus();
                 } else if (TextUtils.isEmpty(txtMail)) {
-                    Toast.makeText(RegisterActivity.this, "Completa el email", Toast.LENGTH_LONG).show();
                     editMail.setError("Se requiere el email");
                     editMail.requestFocus();
                 } else if (!Patterns.EMAIL_ADDRESS.matcher(txtMail).matches()) {
-                    Toast.makeText(RegisterActivity.this, "Vuelve a ingresar el email", Toast.LENGTH_LONG).show();
                     editMail.setError("Se requiere email correcto");
                     editMail.requestFocus();
-                } else if (!isValidDate(txtFechaNac)) {
+                } else if (!validarFecha(txtFechaNac)) {
                     Toast.makeText(RegisterActivity.this, "Formato de fecha inválido o edad mínima no alcanzada (16 años)", Toast.LENGTH_LONG).show();
-                    editFechaNac.setError("Fecha de nacimiento inválida");
                     editFechaNac.requestFocus();
                 } else if (TextUtils.isEmpty(txtPassword)) {
-                    Toast.makeText(RegisterActivity.this, "Completa la contraseña", Toast.LENGTH_LONG).show();
                     editPassword.setError("Es necesario la contraseña");
                     editPassword.requestFocus();
                 } else if (!validatePassword(txtPassword)) {
-                    Toast.makeText(RegisterActivity.this, "La contraseña debe contener al menos 1 número, 1 letra mayúscula y 8 carácteres", Toast.LENGTH_LONG).show();
-                    editPassword.setError("Formato de contraseña inválido");
-                    editPassword.requestFocus();
-                } else if (txtPassword.length() < 6) {
-                    Toast.makeText(RegisterActivity.this, "La contraseña debe tener mínimo 6 caracteres", Toast.LENGTH_LONG).show();
-                    editPassword.setError("La contraseña debe tener mínimo 6 caracteres");
+                    Toast.makeText(RegisterActivity.this, "La contraseña debe contener 1 número, 1 letra mayúscula y 8 carácteres", Toast.LENGTH_LONG).show();
                     editPassword.requestFocus();
                 } else if (TextUtils.isEmpty(txtPasswordRepeat)) {
-                    Toast.makeText(RegisterActivity.this, "Confirma la contraseña", Toast.LENGTH_LONG).show();
                     editPasswordRepeat.setError("Es necesario confirmar la contraseña");
                     editPasswordRepeat.requestFocus();
                 } else if (!txtPassword.equals(txtPasswordRepeat)) {
                     Toast.makeText(RegisterActivity.this, "Las contraseñas no coinciden", Toast.LENGTH_LONG).show();
-                    editPasswordRepeat.setError("Es necesario que coincidan las contraseñas");
                     editPasswordRepeat.requestFocus();
-
                 } else {
                     txtRol = radioButtonRol.getText().toString();
                     progressBar.setVisibility(View.VISIBLE);
-
                     registrarUsuario();
                 }
             }
@@ -156,11 +135,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registrarUsuario() {
-
         auth.createUserWithEmailAndPassword(txtMail, txtPassword).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                guardarInformacion();
+                crearUsuario();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -171,8 +149,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void guardarInformacion() {
-        progressDialog.setMessage("Guardando su información");
+    private void crearUsuario() {
+        progressDialog.setMessage("Registrando usuario");
         progressDialog.show();
 
         String uid = auth.getUid();
@@ -218,35 +196,31 @@ public class RegisterActivity extends AppCompatActivity {
         return matcher.matches();
     }
 
-    private boolean isValidName(String name) {
-        // Expresión regular para validar que solo contenga letras y espacios
+    private boolean validarNombre(String name) {
         String regex = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(name);
         return matcher.matches();
     }
 
-    private boolean isValidDate(String date) {
+    private boolean validarFecha(String date) {
         // Validar el formato de la fecha "YYYY-MM-dd"
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        sdf.setLenient(false); // No permite fechas inválidas como 2023-02-29 (año no bisiesto)
+        sdf.setLenient(false);
 
         try {
             Date birthDate = sdf.parse(date);
             if (birthDate != null) {
-                // Calcular la fecha actual y restar 16 años
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.YEAR, -16);
                 Date minAgeDate = cal.getTime();
-
-                // Comparar la fecha de nacimiento con la fecha mínima de edad
                 return birthDate.before(minAgeDate);
             } else {
                 return false;
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            return false; // Error al parsear la fecha
+            return false;
         }
     }
 }

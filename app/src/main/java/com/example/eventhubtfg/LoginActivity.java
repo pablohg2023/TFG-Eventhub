@@ -1,6 +1,5 @@
 package com.example.eventhubtfg;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,11 +30,11 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText etEmail, etContraseña;
+    private EditText etEmail, etPassword;
     private Button btnIniciarSesion, btnRegistrarse;
     TextView forgotPassword;
     private FirebaseAuth mAuth;
-    private boolean isPasswordVisible = false;
+    private boolean isVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         etEmail = findViewById(R.id.txtEmail);
-        etContraseña = findViewById(R.id.txtPassword);
+        etPassword = findViewById(R.id.txtPassword);
         btnIniciarSesion = findViewById(R.id.btnLogin);
         btnRegistrarse = findViewById(R.id.btnRegister);
         forgotPassword = findViewById(id.txtForgotPassword);
@@ -55,12 +53,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String email = etEmail.getText().toString();
-                String contraseña = etContraseña.getText().toString();
+                String password = etPassword.getText().toString();
 
-                if(email.isEmpty() || contraseña.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Por favor, introduce tu correo electrónico y contraseña.", Toast.LENGTH_SHORT).show();
+                if(email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Por favor, introduce tu correo y contraseña", Toast.LENGTH_SHORT).show();
                 } else {
-                    iniciarSesion(email, contraseña);
+                    iniciarSesion(email, password);
                 }
             }
         });
@@ -68,18 +66,18 @@ public class LoginActivity extends AppCompatActivity {
         btnRegistrarse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent resgisterPage = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(resgisterPage);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
             }
         });
 
-        etContraseña.setOnTouchListener(new View.OnTouchListener() {
+        etPassword.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                final int DRAWABLE_RIGHT = 2;
+                int DRAWABLE_RIGHT = 2;
                 if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.getRawX() >= (etContraseña.getRight() - etContraseña.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        togglePasswordVisibility();
+                    if(event.getRawX() >= (etPassword.getRight() - etPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        passwordVisibility();
                         return true;
                     }
                 }
@@ -98,12 +96,12 @@ public class LoginActivity extends AppCompatActivity {
                 dialogView.findViewById(id.btnSendEmail).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String userEmail = emailBox.getText().toString();
-                        if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()){
+                        String mail = emailBox.getText().toString();
+                        if (TextUtils.isEmpty(mail) && !Patterns.EMAIL_ADDRESS.matcher(mail).matches()){
                             Toast.makeText(LoginActivity.this, "Ingresa el email correspondiente", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        mAuth.sendPasswordResetEmail(userEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        mAuth.sendPasswordResetEmail(mail).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()){
@@ -148,19 +146,18 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.exists()) {
-                                        String role = dataSnapshot.child("rol").getValue(String.class);
-
+                                        String rol = dataSnapshot.child("rol").getValue(String.class);
                                         // Redirige según el rol del usuario
-                                        if ("Cliente".equals(role)) {
+                                        if ("Cliente".equals(rol)) {
                                             Toast.makeText(LoginActivity.this, "Inicio de sesión como cliente", Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                         } else {
-                                            Toast.makeText(LoginActivity.this, "Inicio de sesión como organizador de eventos", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(LoginActivity.this, "Inicio de sesión como organizador", Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(LoginActivity.this, MainActivityOrg.class));
                                         }
                                         finish();
                                     } else {
-                                        Toast.makeText(LoginActivity.this, "No se pudo obtener el rol del usuario.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginActivity.this, "No se pudo obtener el rol del usuario", Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -176,17 +173,16 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void togglePasswordVisibility() {
-        if (isPasswordVisible) {
+    private void passwordVisibility() {
+        if (isVisible) {
             // Si la contraseña es visible, ocultarla
-            etContraseña.setTransformationMethod(new PasswordTransformationMethod());
+            etPassword.setTransformationMethod(new PasswordTransformationMethod());
         } else {
             // Si la contraseña está oculta, mostrarla
-            etContraseña.setTransformationMethod(null);
+            etPassword.setTransformationMethod(null);
         }
-        // Mover el cursor al final del texto
-        etContraseña.setSelection(etContraseña.length());
-        isPasswordVisible = !isPasswordVisible; // Cambiar el estado de visibilidad
+        etPassword.setSelection(etPassword.length());
+        isVisible = !isVisible;
     }
 
 }

@@ -29,10 +29,10 @@ import java.util.Locale;
 
 public class CreateEvent extends AppCompatActivity {
 
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private EditText etNombreEvento, etDescripcionEvento, etLugarEvento, etDireccionEvento, etFechaEvento, etHoraEvento, etPrecioEvento;
-    private Button btnCrearEvento, btnSeleccionarImagen, btnCancelarEvento;
-    private ImageView imgEvento;
+    private int PICK_IMAGE_REQUEST = 1;
+    private EditText etNombre, etDescripcion, etLugar, etDireccion, etFecha, etHora, etPrecio;
+    private Button btnCrear, btnSeleccionarImagen, btnCancelar;
+    private ImageView img;
     private Uri imageUri;
     private String imageUrl;
 
@@ -41,17 +41,17 @@ public class CreateEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
-        etNombreEvento = findViewById(R.id.etNombreEvento);
-        etDescripcionEvento = findViewById(R.id.etDescripcionEvento);
-        etLugarEvento = findViewById(R.id.etLugarEvento);
-        etDireccionEvento = findViewById(R.id.etDireccionEvento);
-        etFechaEvento = findViewById(R.id.etFechaEvento);
-        etHoraEvento = findViewById(R.id.etHoraEvento);
-        etPrecioEvento = findViewById(R.id.etPrecioEvento);
-        btnCrearEvento = findViewById(R.id.btnCrearEvento);
+        etNombre = findViewById(R.id.etNombreEvento);
+        etDescripcion = findViewById(R.id.etDescripcionEvento);
+        etLugar = findViewById(R.id.etLugarEvento);
+        etDireccion = findViewById(R.id.etDireccionEvento);
+        etFecha = findViewById(R.id.etFechaEvento);
+        etHora = findViewById(R.id.etHoraEvento);
+        etPrecio = findViewById(R.id.etPrecioEvento);
+        btnCrear = findViewById(R.id.btnCrearEvento);
         btnSeleccionarImagen = findViewById(R.id.btnSeleccionarImagen);
-        btnCancelarEvento = findViewById(R.id.btnCancelarEvento);
-        imgEvento = findViewById(R.id.imgEvento);
+        btnCancelar = findViewById(R.id.btnCancelarEvento);
+        img = findViewById(R.id.imgEvento);
 
         btnSeleccionarImagen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,18 +60,18 @@ public class CreateEvent extends AppCompatActivity {
             }
         });
 
-        btnCrearEvento.setOnClickListener(new View.OnClickListener() {
+        btnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (imageUri != null) {
-                    uploadImage();
+                    cargarImagen();
                 } else {
                     Toast.makeText(CreateEvent.this, "Por favor, selecciona una imagen para el evento", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        btnCancelarEvento.setOnClickListener(new View.OnClickListener() {
+        btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CreateEvent.this, MainActivityOrg.class);
@@ -93,11 +93,11 @@ public class CreateEvent extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-            imgEvento.setImageURI(imageUri);
+            img.setImageURI(imageUri);
         }
     }
 
-    private void uploadImage() {
+    private void cargarImagen() {
         if (imageUri != null) {
             StorageReference storageRef = FirebaseStorage.getInstance().getReference("eventos").child(System.currentTimeMillis() + ".jpg");
             storageRef.putFile(imageUri)
@@ -108,7 +108,7 @@ public class CreateEvent extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     imageUrl = uri.toString();
-                                    crearEvento();
+                                    crear();
                                 }
                             });
                         }
@@ -122,36 +122,36 @@ public class CreateEvent extends AppCompatActivity {
         }
     }
 
-    private void crearEvento() {
-        String nombre = etNombreEvento.getText().toString().trim();
-        String descripcion = etDescripcionEvento.getText().toString().trim();
-        String lugar = etLugarEvento.getText().toString().trim();
-        String direccion = etDireccionEvento.getText().toString().trim();
-        String fecha = etFechaEvento.getText().toString().trim();
-        String hora = etHoraEvento.getText().toString().trim();
-        String precio = etPrecioEvento.getText().toString().trim();
+    private void crear() {
+        String nombre = etNombre.getText().toString().trim();
+        String descripcion = etDescripcion.getText().toString().trim();
+        String lugar = etLugar.getText().toString().trim();
+        String direccion = etDireccion.getText().toString().trim();
+        String fecha = etFecha.getText().toString().trim();
+        String hora = etHora.getText().toString().trim();
+        String precio = etPrecio.getText().toString().trim();
 
         if (nombre.isEmpty() || descripcion.isEmpty() || lugar.isEmpty() || direccion.isEmpty() || fecha.isEmpty() || hora.isEmpty() || precio.isEmpty()) {
             Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (!isValidDescription(descripcion)) {
+        if (!validarDescripcion(descripcion)) {
             Toast.makeText(this, "La descripción no puede tener más de 150 caracteres", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (!isValidFutureDate(fecha)) {
+        if (!validarFecha(fecha)) {
             Toast.makeText(this, "La fecha debe ser posterior a una semana del día actual", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (!isValidMilitaryTime(hora)) {
+        if (!validarHora(hora)) {
             Toast.makeText(this, "La hora debe estar en formato de 24 horas (HH:mm)", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (!isValidPrice(precio)) {
+        if (!validarPrecio(precio)) {
             Toast.makeText(this, "El precio no puede ser negativo ni menor a cero", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -185,17 +185,17 @@ public class CreateEvent extends AppCompatActivity {
                 .addOnFailureListener(e -> Toast.makeText(CreateEvent.this, "Error al crear el evento", Toast.LENGTH_SHORT).show());
     }
 
-    private boolean isValidDescription(String description) {
+    private boolean validarDescripcion(String description) {
         return description.length() <= 150;
     }
 
-    private boolean isValidFutureDate(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private boolean validarFecha(String date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Calendar currentDate = Calendar.getInstance();
         currentDate.add(Calendar.DAY_OF_MONTH, 7); // Añade una semana a la fecha actual
 
         try {
-            Date inputDate = sdf.parse(date);
+            Date inputDate = dateFormat.parse(date);
             Date futureDate = currentDate.getTime();
 
             return inputDate != null && inputDate.after(futureDate);
@@ -205,25 +205,24 @@ public class CreateEvent extends AppCompatActivity {
         }
     }
 
-    private boolean isValidMilitaryTime(String time) {
-        // El formato debe ser HH:mm
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        sdf.setLenient(false); // Desactiva el modo lenient para asegurar validación estricta
+    private boolean validarHora(String time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        dateFormat.setLenient(false);
 
         try {
-            sdf.parse(time); // Intenta parsear la hora
-            return true; // Si no lanza excepción, la hora es válida en formato militar
+            dateFormat.parse(time);
+            return true;
         } catch (ParseException e) {
-            return false; // Si hay excepción, la hora no es válida en formato militar
+            return false;
         }
     }
 
-    private boolean isValidPrice(String price) {
+    private boolean validarPrecio(String price) {
         try {
             double parsedPrice = Double.parseDouble(price);
-            return parsedPrice >= 0; // El precio debe ser mayor o igual a cero
+            return parsedPrice >= 0;
         } catch (NumberFormatException e) {
-            return false; // No se pudo parsear a double, no es un número válido
+            return false;
         }
     }
 }

@@ -1,20 +1,18 @@
 package com.example.eventhubtfg;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,8 +27,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.checkerframework.common.reflection.qual.NewInstance;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +45,6 @@ public class EditProfile extends AppCompatActivity {
 
     FirebaseUser user;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +62,7 @@ public class EditProfile extends AppCompatActivity {
 
         usuarios = FirebaseDatabase.getInstance().getReference().child("Usuarios");
 
-        cargaDeDatos();
+        cargarPerfil();
 
         btnEliminarCuenta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,9 +90,9 @@ public class EditProfile extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(EditProfile.this);
                 View dialogView = getLayoutInflater().inflate(R.layout.fragment_new_password, null);
-                EditText editTextCurrentPassword = dialogView.findViewById(R.id.editTextCurrentPassword);
-                EditText editTextNewPassword = dialogView.findViewById(R.id.editTextNewPassword);
-                EditText editTextRepeatPassword = dialogView.findViewById(R.id.editTextRepeatPassword);
+                EditText editPassword = dialogView.findViewById(R.id.editTextCurrentPassword);
+                EditText editNewPassword = dialogView.findViewById(R.id.editTextNewPassword);
+                EditText editRepeatPassword = dialogView.findViewById(R.id.editTextRepeatPassword);
                 Button btnUpdatePassword = dialogView.findViewById(R.id.btnUpdatePassword);
                 Button btnCancelPassword = dialogView.findViewById(R.id.btnCancelPassword);
 
@@ -107,11 +102,11 @@ public class EditProfile extends AppCompatActivity {
                 btnUpdatePassword.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String currentPassword = editTextCurrentPassword.getText().toString().trim();
-                        String newPassword = editTextNewPassword.getText().toString().trim();
-                        String repeatPassword = editTextRepeatPassword.getText().toString().trim();
+                        String password = editPassword.getText().toString().trim();
+                        String newPassword = editNewPassword.getText().toString().trim();
+                        String repeatPassword = editRepeatPassword.getText().toString().trim();
 
-                        if (TextUtils.isEmpty(currentPassword) || TextUtils.isEmpty(newPassword) || TextUtils.isEmpty(repeatPassword)) {
+                        if (TextUtils.isEmpty(password) || TextUtils.isEmpty(newPassword) || TextUtils.isEmpty(repeatPassword)) {
                             Toast.makeText(EditProfile.this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -121,14 +116,13 @@ public class EditProfile extends AppCompatActivity {
                             return;
                         }
 
-                        // Validar la nueva contraseña utilizando el método estático de RegisterActivity
                         if (!RegisterActivity.validatePassword(newPassword)) {
                             Toast.makeText(EditProfile.this, "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
+                        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), password);
 
                         user.reauthenticate(credential)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -138,8 +132,7 @@ public class EditProfile extends AppCompatActivity {
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
-                                                        // Actualizar contraseña en la base de datos en tiempo real
-                                                        actualizarContraseñaEnBaseDeDatos(user.getUid(), newPassword);
+                                                        updatePassword(user.getUid(), newPassword);
 
                                                         Toast.makeText(EditProfile.this, "Contraseña actualizada exitosamente", Toast.LENGTH_SHORT).show();
                                                         dialog.dismiss();
@@ -201,7 +194,7 @@ public class EditProfile extends AppCompatActivity {
         });
     }
 
-    private void cargaDeDatos() {
+    private void cargarPerfil() {
         usuarios.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -216,20 +209,21 @@ public class EditProfile extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                error.getMessage();
             }
         });
     }
 
-    private void actualizarContraseñaEnBaseDeDatos(String usuarioId, String nuevaContraseña) {
+    private void updatePassword(String usuarioId, String newPassword) {
         DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(usuarioId);
         Map<String, Object> datosActualizados = new HashMap<>();
-        datosActualizados.put("password", nuevaContraseña);
+        datosActualizados.put("password", newPassword);
 
         referenciaUsuario.updateChildren(datosActualizados)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        // La contraseña se ha actualizado en la base de datos en tiempo real
+                        Toast.makeText(EditProfile.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -273,7 +267,7 @@ public class EditProfile extends AppCompatActivity {
     private void confirmarEliminarCuenta() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirmación");
-        builder.setMessage("¿Estás seguro de que quieres eliminar tu cuenta? Esta acción es irreversible.");
+        builder.setMessage("¿Estás seguro de que quieres eliminar tu cuenta?");
 
         builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
             @Override
@@ -292,6 +286,4 @@ public class EditProfile extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
-
 }

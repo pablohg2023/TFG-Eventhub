@@ -42,11 +42,11 @@ public class CardCalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder
         Evento evento = eventos.get(position);
 
         if (evento.getImagenUrl() != null && !evento.getImagenUrl().isEmpty()) {
-            Picasso.get().load(evento.getImagenUrl()).into(holder.eventImage);
+            Picasso.get().load(evento.getImagenUrl()).into(holder.imagen);
         }
 
-        holder.eventName.setText(evento.getNombre());
-        holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+        holder.nombre.setText(evento.getNombre());
+        holder.botonFavorito.setImageResource(R.drawable.ic_favorite_border);
 
         int eventoId = evento.getId();
         String userId = obtenerIdUsuario();
@@ -58,15 +58,15 @@ public class CardCalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder
             favoritosRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    boolean esFavorito = dataSnapshot.exists();
-                    holder.favoriteButton.setImageResource(esFavorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
-                    evento.setFavorito(esFavorito);
+                    boolean favorito = dataSnapshot.exists();
+                    holder.botonFavorito.setImageResource(favorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
+                    evento.setFavorito(favorito);
 
-                    holder.favoriteButton.setOnClickListener(v -> {
-                        boolean nuevoEstadoFavorito = !evento.getFavorito();
-                        evento.setFavorito(nuevoEstadoFavorito);
-                        holder.favoriteButton.setImageResource(nuevoEstadoFavorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
-                        if (nuevoEstadoFavorito) {
+                    holder.botonFavorito.setOnClickListener(v -> {
+                        boolean cambioFavorito = !evento.getFavorito();
+                        evento.setFavorito(cambioFavorito);
+                        holder.botonFavorito.setImageResource(cambioFavorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
+                        if (cambioFavorito) {
                             favoritosRef.setValue(evento);
                         } else {
                             favoritosRef.removeValue();
@@ -77,22 +77,18 @@ public class CardCalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Manejar el error si es necesario
+                    databaseError.getMessage();
                 }
-            });
-        } else {
-            holder.favoriteButton.setOnClickListener(v -> {
-                // Manejar la situación donde no hay usuario autenticado, si es necesario
             });
         }
 
         holder.itemView.setOnClickListener(v -> {
             if (evento.getFechaDate() != null) {
-                long dateInMillis = evento.getFechaDate().getTime();
-                calendarView.setDate(dateInMillis, true, true);
+                long tiempo = evento.getFechaDate().getTime();
+                calendarView.setDate(tiempo, true, true);
 
-                String horaEvento = evento.getHora();
-                Toast.makeText(context, "Hora del evento: " + horaEvento, Toast.LENGTH_SHORT).show();
+                String hora = evento.getHora();
+                Toast.makeText(context, "Hora del evento: " + hora, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -111,7 +107,7 @@ public class CardCalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder
         return eventos.size();
     }
 
-    public void updateData(ArrayList<Evento> nuevosEventos) {
+    public void actualizarDatabase(ArrayList<Evento> nuevosEventos) {
         this.eventos = nuevosEventos;
         notifyDataSetChanged();
     }

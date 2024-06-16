@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.eventhubtfg.Evento;
-import com.example.eventhubtfg.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -20,14 +19,14 @@ public class HomeViewModel extends ViewModel {
 
     public HomeViewModel() {
         listaDatos = new MutableLiveData<>();
-        cargarEventosDesdeFirebase();
+        cargarEventos();
     }
 
     public LiveData<ArrayList<Evento>> getListaDatos() {
         return listaDatos;
     }
 
-    private void cargarEventosDesdeFirebase() {
+    private void cargarEventos() {
         FirebaseDatabase.getInstance().getReference("eventos").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -43,7 +42,7 @@ public class HomeViewModel extends ViewModel {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Manejar el error aquí
+                error.getMessage();
             }
         });
     }

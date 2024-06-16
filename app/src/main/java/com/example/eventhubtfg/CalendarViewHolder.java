@@ -8,15 +8,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CalendarViewHolder extends RecyclerView.ViewHolder {
-    ImageView eventImage;
-    TextView eventName;
-    ImageButton favoriteButton;
+    ImageView imagen;
+    TextView nombre;
+    ImageButton botonFavorito;
 
     public CalendarViewHolder(@NonNull View itemView) {
         super(itemView);
-        eventImage = itemView.findViewById(R.id.event_image);
-        eventName = itemView.findViewById(R.id.event_name);
-        favoriteButton = itemView.findViewById(R.id.favorite_button);
+        imagen = itemView.findViewById(R.id.event_image);
+        nombre = itemView.findViewById(R.id.event_name);
+        botonFavorito = itemView.findViewById(R.id.favorite_button);
     }
 }
 

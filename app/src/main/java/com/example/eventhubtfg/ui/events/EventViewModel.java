@@ -17,18 +17,18 @@ import java.util.ArrayList;
 
 public class EventViewModel extends ViewModel {
 
-    private final MutableLiveData<ArrayList<Evento>> favoriteEvents;
+    private MutableLiveData<ArrayList<Evento>> eventosFavoritos;
 
     public EventViewModel() {
-        favoriteEvents = new MutableLiveData<>();
-        loadFavoriteEventsFromFirebase();
+        eventosFavoritos = new MutableLiveData<>();
+        cargarEventosFavoritos();
     }
 
-    public LiveData<ArrayList<Evento>> getFavoriteEvents() {
-        return favoriteEvents;
+    public LiveData<ArrayList<Evento>> getEventosFavoritos() {
+        return eventosFavoritos;
     }
 
-    private void loadFavoriteEventsFromFirebase() {
+    private void cargarEventosFavoritos() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
@@ -42,12 +42,12 @@ public class EventViewModel extends ViewModel {
                             eventos.add(evento);
                         }
                     }
-                    favoriteEvents.setValue(eventos);
+                    eventosFavoritos.setValue(eventos);
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    // Manejar el error aquí
+                    error.getMessage();
                 }
             });
         }

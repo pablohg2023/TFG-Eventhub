@@ -1,10 +1,7 @@
 package com.example.eventhubtfg;
 
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -12,15 +9,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthWebException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,8 +30,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     DatabaseReference usuarios;
 
-
-    @SuppressLint("WrongViewCast")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,14 +85,12 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Manejar el error si es necesario
+                            databaseError.getMessage();
                         }
                     });
                 }
             }
         });
-
-
     }
 
     @Override
@@ -114,14 +101,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void comprobarIniciosesion() {
         if (user != null) {
-            cargaDeDatos();
+            cargarPerfil();
         } else {
             startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
             finish();
         }
     }
 
-    private void cargaDeDatos() {
+    private void cargarPerfil() {
         usuarios.child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -131,13 +118,12 @@ public class ProfileActivity extends AppCompatActivity {
                     textCorreo.setText((CharSequence) snapshot.child("correo").getValue());
                     textRol.setText((CharSequence) snapshot.child("rol").getValue());
                     textFechaNac.setText((CharSequence) snapshot.child("fecNacimiento").getValue());
-
                 }
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                error.getMessage();
             }
         });
     }
@@ -145,7 +131,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void cerrarSesion() {
         firebaseAuth.signOut();
         startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-        Toast.makeText(this, "Se cerro sesión exitosamente", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Se cerro sesión correctamente", Toast.LENGTH_SHORT).show();
     }
 
 }

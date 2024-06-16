@@ -5,10 +5,9 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import androidx.appcompat.widget.SearchView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,7 +18,6 @@ import com.example.eventhubtfg.Evento;
 import com.example.eventhubtfg.databinding.FragmentHomeBinding;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
 
@@ -82,8 +80,6 @@ public class HomeFragment extends Fragment {
         }
         adapter.updateData(eventosFiltrados);
     }
-
-
 
     @Override
     public void onDestroyView() {

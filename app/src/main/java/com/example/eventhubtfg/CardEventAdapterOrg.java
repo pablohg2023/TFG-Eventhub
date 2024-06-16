@@ -12,12 +12,12 @@ import java.util.ArrayList;
 public class CardEventAdapterOrg extends RecyclerView.Adapter<EventViewHolderOrg> {
     private ArrayList<Evento> eventos;
     private Context context;
-    private OnEventDeleteListener onEventDeleteListener;
+    private OnEventDeleteListener deleteListener;
 
     public CardEventAdapterOrg(Context context, ArrayList<Evento> eventos, OnEventDeleteListener onEventDeleteListener) {
         this.context = context;
         this.eventos = (eventos != null) ? eventos : new ArrayList<>();
-        this.onEventDeleteListener = onEventDeleteListener;
+        this.deleteListener = onEventDeleteListener;
     }
 
     @NonNull
@@ -32,15 +32,15 @@ public class CardEventAdapterOrg extends RecyclerView.Adapter<EventViewHolderOrg
         Evento evento = eventos.get(position);
 
         if (evento.getImagenUrl() != null && !evento.getImagenUrl().isEmpty()) {
-            Picasso.get().load(evento.getImagenUrl()).into(holder.eventImage);
+            Picasso.get().load(evento.getImagenUrl()).into(holder.imagen);
         }
 
-        holder.eventName.setText(evento.getNombre());
-        holder.eventDescription.setText(evento.getDescripcion());
+        holder.nombre.setText(evento.getNombre());
+        holder.descripcion.setText(evento.getDescripcion());
 
-        holder.deleteButton.setOnClickListener(v -> {
-            if (onEventDeleteListener != null) {
-                onEventDeleteListener.onEventDelete(evento.getId());
+        holder.botonEliminar.setOnClickListener(v -> {
+            if (deleteListener != null) {
+                deleteListener.onEventDelete(evento.getId());
             }
         });
     }

@@ -13,8 +13,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.eventhubtfg.LoginActivity;
-import com.example.eventhubtfg.R;
 import com.example.eventhubtfg.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home,/*R.id.nav_gallery,*/ R.id.nav_events, R.id.nav_perfil, R.id.nav_logout, R.id.nav_calendar)
+                R.id.nav_home, R.id.nav_events, R.id.nav_perfil, R.id.nav_logout, R.id.nav_calendar)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);

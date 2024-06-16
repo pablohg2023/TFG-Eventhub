@@ -8,16 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class EventViewHolder extends RecyclerView.ViewHolder {
-    ImageView eventImage;
-    TextView eventName;
-    TextView eventDescription;
-    ImageButton favoriteButton;
+    ImageView imagen;
+    TextView nombre;
+    TextView descripcion;
+    ImageButton botonFavorito;
 
     public EventViewHolder(@NonNull View itemView) {
         super(itemView);
-        eventImage = itemView.findViewById(R.id.event_image);
-        eventName = itemView.findViewById(R.id.event_name);
-        eventDescription = itemView.findViewById(R.id.event_description);
-        favoriteButton = itemView.findViewById(R.id.favorite_button);
+        imagen = itemView.findViewById(R.id.event_image);
+        nombre = itemView.findViewById(R.id.event_name);
+        descripcion = itemView.findViewById(R.id.event_description);
+        botonFavorito = itemView.findViewById(R.id.favorite_button);
     }
 }

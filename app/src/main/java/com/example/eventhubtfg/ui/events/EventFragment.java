@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -19,6 +20,7 @@ public class EventFragment extends Fragment {
     private FragmentEventBinding binding;
     private EventViewModel eventViewModel;
     private CardEventAdapter adapter;
+    private TextView txtFavoritos;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -28,17 +30,22 @@ public class EventFragment extends Fragment {
         View root = binding.getRoot();
 
         RecyclerView recyclerView = binding.recylcerId;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        txtFavoritos = binding.txtFavoritos;
 
-        adapter = new CardEventAdapter(getContext(), eventViewModel.getFavoriteEvents().getValue());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new CardEventAdapter(getContext(), eventViewModel.getEventosFavoritos().getValue());
         recyclerView.setAdapter(adapter);
 
-        eventViewModel.getFavoriteEvents().observe(getViewLifecycleOwner(), eventos -> {
-            if (eventos != null) {
+        eventViewModel.getEventosFavoritos().observe(getViewLifecycleOwner(), eventos -> {
+            if (eventos != null && !eventos.isEmpty()) {
                 adapter.updateData(eventos);
+                recyclerView.setVisibility(View.VISIBLE);
+                txtFavoritos.setVisibility(View.GONE);
+            } else {
+                recyclerView.setVisibility(View.GONE);
+                txtFavoritos.setVisibility(View.VISIBLE);
             }
         });
-
         return root;
     }
 

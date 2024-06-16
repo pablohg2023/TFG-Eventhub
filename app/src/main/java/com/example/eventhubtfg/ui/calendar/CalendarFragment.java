@@ -18,9 +18,6 @@ import com.example.eventhubtfg.R;
 import com.example.eventhubtfg.databinding.FragmentCalendarBinding;
 
 
-
-
-
 public class CalendarFragment extends Fragment {
 
     private FragmentCalendarBinding binding;
@@ -39,12 +36,12 @@ public class CalendarFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         calendarView = root.findViewById(R.id.calendarView);
 
-        adapter = new CardCalendarAdapter(getContext(), calendarViewModel.getFavoriteEvents().getValue(), calendarView);
+        adapter = new CardCalendarAdapter(getContext(), calendarViewModel.getEventosFavoritos().getValue(), calendarView);
         recyclerView.setAdapter(adapter);
 
-        calendarViewModel.getFavoriteEvents().observe(getViewLifecycleOwner(), eventos -> {
+        calendarViewModel.getEventosFavoritos().observe(getViewLifecycleOwner(), eventos -> {
             if (eventos != null) {
-                adapter.updateData(eventos);
+                adapter.actualizarDatabase(eventos);
             }
         });
 

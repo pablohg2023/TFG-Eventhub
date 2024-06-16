@@ -6,14 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 public class CardEventAdapter extends RecyclerView.Adapter<EventViewHolder> {
@@ -47,14 +47,14 @@ public class CardEventAdapter extends RecyclerView.Adapter<EventViewHolder> {
         // Verificar si la URL de la imagen no está vacía
         if (evento.getImagenUrl() != null && !evento.getImagenUrl().isEmpty()) {
             // Usar Picasso para cargar la imagen desde la URL
-            Picasso.get().load(evento.getImagenUrl()).into(holder.eventImage);
+            Picasso.get().load(evento.getImagenUrl()).into(holder.imagen);
         }
 
-        holder.eventName.setText(evento.getNombre());
-        holder.eventDescription.setText(evento.getDescripcion());
+        holder.nombre.setText(evento.getNombre());
+        holder.descripcion.setText(evento.getDescripcion());
 
         // Establecer el ícono del botón de favoritos como no favorito inicialmente
-        holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+        holder.botonFavorito.setImageResource(R.drawable.ic_favorite_border);
 
         // Obtener el ID del evento
         int eventoId = evento.getId();
@@ -70,34 +70,33 @@ public class CardEventAdapter extends RecyclerView.Adapter<EventViewHolder> {
             favoritosRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    boolean esFavorito = dataSnapshot.exists();
+                    boolean favorito = dataSnapshot.exists();
 
                     // Establecer el ícono del botón de favoritos según el estado del evento
-                    holder.favoriteButton.setImageResource(esFavorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
+                    holder.botonFavorito.setImageResource(favorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
 
                     // Establecer el estado favorito del evento
-                    evento.setFavorito(esFavorito);
+                    evento.setFavorito(favorito);
 
                     // Establecer OnClickListener para el botón de favoritos
-                    holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
+                    holder.botonFavorito.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             // Invertir el estado de favorito localmente
-                            boolean nuevoEstadoFavorito = !evento.getFavorito();
-                            evento.setFavorito(nuevoEstadoFavorito);
+                            boolean cambioFavorito = !evento.getFavorito();
+                            evento.setFavorito(cambioFavorito);
 
                             // Cambiar el ícono del botón
-                            holder.favoriteButton.setImageResource(nuevoEstadoFavorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
+                            holder.botonFavorito.setImageResource(cambioFavorito ? R.drawable.ic_favorite : R.drawable.ic_favorite_border);
 
                             // Actualizar la base de datos de favoritos del usuario
-                            if (nuevoEstadoFavorito) {
+                            if (cambioFavorito) {
                                 // Agregar a favoritos
                                 favoritosRef.setValue(evento);
                             } else {
                                 // Eliminar de favoritos
                                 favoritosRef.removeValue();
                             }
-
                             // Notificar que el ítem ha cambiado
                             notifyItemChanged(position);
                         }
@@ -106,15 +105,7 @@ public class CardEventAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Manejar el error si es necesario
-                }
-            });
-        } else {
-            // Establecer OnClickListener para el botón de favoritos cuando no hay usuario autenticado
-            holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Manejar la situación donde no hay usuario autenticado, si es necesario
+                    databaseError.getMessage();
                 }
             });
         }
@@ -123,7 +114,7 @@ public class CardEventAdapter extends RecyclerView.Adapter<EventViewHolder> {
             @Override
             public void onClick(View v) {
                 // Aquí puedes abrir un nuevo fragmento para mostrar los detalles del evento
-                Detalle_Evento_Fragment fragment = new Detalle_Evento_Fragment();
+                DetailEventFragment fragment = new DetailEventFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("evento", evento);
                 fragment.setArguments(bundle);

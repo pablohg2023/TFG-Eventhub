@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -12,10 +11,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eventhubtfg.CardEventAdapter;
 import com.example.eventhubtfg.CardEventAdapterOrg;
 import com.example.eventhubtfg.Evento;
-import com.example.eventhubtfg.databinding.FragmentHomeBinding;
 import com.example.eventhubtfg.databinding.FragmentHomeOrgBinding;
 
 import java.util.ArrayList;
@@ -25,7 +22,6 @@ public class HomeOrgFragment extends Fragment implements CardEventAdapterOrg.OnE
     private FragmentHomeOrgBinding binding;
     private HomeOrgViewModel homeOrgViewModel;
     private CardEventAdapterOrg adapter;
-
     private ArrayList<Evento> listaEventos = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,7 +44,6 @@ public class HomeOrgFragment extends Fragment implements CardEventAdapterOrg.OnE
                 adapter.updateData(listaEventos);
             }
         });
-
         return root;
     }
 

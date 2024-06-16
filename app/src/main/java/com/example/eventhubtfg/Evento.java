@@ -1,12 +1,9 @@
 package com.example.eventhubtfg;
 
 import java.io.Serializable;
-
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class Evento implements Serializable {
 
@@ -19,7 +16,7 @@ public class Evento implements Serializable {
     private String hora;
     private double precio;
     private Boolean favorito;
-    private Date fechaDate; // Fecha como tipo Date
+    private Date fechaDate;
 
     public Evento() {
     }
@@ -35,22 +32,6 @@ public class Evento implements Serializable {
         this.favorito = favorito;
         this.precio = precio;
         this.fechaDate = convertStringToDate(fecha);
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
-
-    public Boolean getFavorito() {
-        return favorito;
-    }
-
-    public void setFavorito(Boolean favorito) {
-        this.favorito = favorito;
     }
 
     public int getId() {
@@ -99,7 +80,6 @@ public class Evento implements Serializable {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
-        this.fechaDate = convertStringToDate(fecha); // Convertir la fecha String a tipo Date
     }
 
     public String getHora() {
@@ -110,8 +90,28 @@ public class Evento implements Serializable {
         this.hora = hora;
     }
 
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public Boolean getFavorito() {
+        return favorito;
+    }
+
+    public void setFavorito(Boolean favorito) {
+        this.favorito = favorito;
+    }
+
     public Date getFechaDate() {
         return fechaDate;
+    }
+
+    public void setFechaDate(Date fechaDate) {
+        this.fechaDate = fechaDate;
     }
 
     // Método para convertir la fecha String a tipo Date

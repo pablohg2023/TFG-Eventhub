@@ -14,9 +14,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.eventhubtfg.LoginActivity;
-import com.example.eventhubtfg.R;
-import com.example.eventhubtfg.databinding.ActivityMainBinding;
 import com.example.eventhubtfg.databinding.ActivityMainOrgBinding;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
