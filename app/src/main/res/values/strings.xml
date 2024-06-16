@@ -65,4 +65,5 @@
     </string>
     <string name="title_activity_callll">Callll</string>
     <string name="title_activity_card_event_adapter">CardEventAdapter</string>
+    <string name="title_activity_create_event">CreateEvent</string>
 </resources>

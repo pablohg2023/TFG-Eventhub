@@ -16,5 +16,10 @@
         android:name="com.example.eventhubtfg.ProfileActivity"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/activity_profile" />
+    <activity
+        android:id="@+id/createEvent"
+        android:name="com.example.eventhubtfg.CreateEvent"
+        android:label="activity_create_event"
+        tools:layout="@layout/activity_create_event" />
 
 </navigation>

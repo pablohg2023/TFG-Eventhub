@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp"
+    tools:context=".CreateEvent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Botón de selección de imagen centrado -->
+        <Button
+            android:id="@+id/btnSeleccionarImagen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar Imagen" />
+
+        <!-- ImageView para mostrar la imagen seleccionada -->
+        <ImageView
+            android:id="@+id/imgEvento"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="centerCrop"
+            android:background="@android:color/darker_gray"
+            android:contentDescription="Imagen del Evento" />
+
+        <!-- Campo de entrada para el nombre del evento -->
+        <EditText
+            android:id="@+id/etNombreEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre del Evento"
+            android:layout_marginTop="16dp"
+            android:inputType="textPersonName" />
+
+        <!-- Campo de entrada para la descripción del evento -->
+        <EditText
+            android:id="@+id/etDescripcionEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Descripción del Evento"
+            android:layout_marginTop="16dp"
+            android:inputType="textMultiLine"
+            android:minLines="3" />
+
+        <!-- Campo de entrada para el lugar del evento -->
+        <EditText
+            android:id="@+id/etLugarEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Lugar del Evento"
+            android:layout_marginTop="16dp"
+            android:inputType="text" />
+
+        <!-- Campo de entrada para la dirección del evento -->
+        <EditText
+            android:id="@+id/etDireccionEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Dirección del Evento"
+            android:layout_marginTop="16dp"
+            android:inputType="textPostalAddress" />
+
+        <!-- Campo de entrada para la fecha del evento -->
+        <EditText
+            android:id="@+id/etFechaEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fecha del Evento"
+            android:layout_marginTop="16dp"
+            android:clickable="true" />
+
+        <EditText
+            android:id="@+id/etHoraEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Hora del Evento"
+            android:layout_marginTop="16dp"
+            android:inputType="time"
+            android:focusable="false"
+            android:clickable="true" />
+
+        <!-- Campo de entrada para el precio del evento -->
+        <EditText
+            android:id="@+id/etPrecioEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Precio del Evento"
+            android:layout_marginTop="16dp"
+            android:inputType="numberDecimal" />
+
+        <!-- Botón para enviar el formulario -->
+        <Button
+            android:id="@+id/btnCrearEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Crear Evento" />
+
+        <Button
+            android:id="@+id/btnCancelarEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Cancelar" />
+
+    </LinearLayout>
+</ScrollView>
